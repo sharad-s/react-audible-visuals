@@ -1,13 +1,15 @@
-import React, { Component } from 'react'
+import React, { Component } from "react";
 
-import ExampleComponent from 'react-audible-visuals'
+import { Spiral } from "react-audible-visuals";
+import { Flower } from "react-audible-visuals";
 
 export default class App extends Component {
-  render () {
+  render() {
     return (
       <div>
-        <ExampleComponent text='Modern React component module' />
+        <Spiral text="Dude yeah" />
+        <Flower text="Yeah dude" />
       </div>
-    )
+    );
   }
 }
