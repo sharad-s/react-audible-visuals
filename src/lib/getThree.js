@@ -1,5 +1,4 @@
-import * as THREE from 'three';
-
+import THREE from 'three';
 
 // Projector
 THREE.RenderableObject = function () {
