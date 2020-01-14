@@ -1,14 +1,16 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 
 import { Spiral } from "react-audible-visuals";
-// import { Flower } from "react-audible-visuals";
 
 export default class App extends Component {
   render() {
     return (
-      <div className="god">
-        <Spiral />
-      </div>
+      <Fragment>
+        <div className="god">
+          <h1 style={{color:"white", paddingTop:"20px"}}> HELLO </h1>
+          <Spiral />
+        </div>
+      </Fragment>
     );
   }
 }

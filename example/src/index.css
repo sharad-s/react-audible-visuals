@@ -5,6 +5,14 @@ body {
 }
 
 .god {
-  width:50vw;
-  height:50vh;
-}
+  height: 100vh;
+  width: 100vw;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: black;
+  position:fixed;
+  z-index: -1;
+} 

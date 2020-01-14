@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import THREE from "../../lib/getThree";
+import THREE from "../../lib/getThree.min";
 
 import { PI2 } from "../../utils/constants";
 import isEmpty from "../../utils/isEmpty";
@@ -7,10 +7,10 @@ import isEmpty from "../../utils/isEmpty";
 // AudioContext
 import { ctx, analyser } from "../../utils/getAnalyser";
 
-import styles from "../../styles.css"
+import styles from "../../styles.css";
 
 // ThreeJS
-var camera, scene, renderer;
+var camera, scene, renderer, canvas;
 var particles = [];
 var circleCounter;
 
@@ -19,30 +19,20 @@ var parent;
 // CORS
 var corsProxy = "https://cors-anywhere.herokuapp.com/";
 
-var settings = {
-  R: 0.7,
-  G: 0,
-  B: 0.7,
-  fov: 50,
-  radius: 35,
-  intensity: 0.08,
-  dotSize: 0.2,
-  aFlower: 25,
-  bFlower: 0,
-  flowerAngle: 2.86
-};
+// Props and Default Props
+var settings;
 
 class App extends React.Component {
   state = {
     source: {},
     audioURLS: [
-      "https://a.clyp.it/cwvlsmnd.mp3", //rain
-      "https://a.clyp.it/jagqtd5f.mp3",
+      // "https://a.clyp.it/cwvlsmnd.mp3", //rain
+      // "https://a.clyp.it/jagqtd5f.mp3",
       // 'https://a.clyp.it/h1vtpoe4.mp3',
-      "https://a.clyp.it/mkfjydwq.mp3", //Italo disco
+      // "https://a.clyp.it/mkfjydwq.mp3", //Italo disco
       // 'https://a.clyp.it/zas30wns.mp3', //sertraline
       // 'https://a.clyp.it/xj0g30io.mp3', // blackbirds
-      "https://a.clyp.it/fkvlpwft.mp3", // practice9short
+      // "https://a.clyp.it/fkvlpwft.mp3", // practice9short
       // 'https://a.clyp.it/bfujpc4c.mp3', // poetry
       "https://a.clyp.it/0ar0p540.mp3", // 6.4
       "https://a.clyp.it/jtxyzmfx.mp3", // 6.17 old,
@@ -54,8 +44,21 @@ class App extends React.Component {
   };
 
   componentDidMount() {
+    settings = {
+      R: 0.7,
+      G: 0,
+      B: 0.7,
+      fov: 50,
+      intensity: 0.08,
+      radius: 65,
+      minRadius: 35,
+      maxRadius: 65,
+      animate: false,
+    };
+
     // Get parent element
     parent = this.poop.parentElement;
+    console.log({ parent });
 
     scene = new THREE.Scene();
 
@@ -77,8 +80,11 @@ class App extends React.Component {
     // Renderer
     renderer = new THREE.CanvasRenderer({ alpha: true });
     renderer.setSize(parent.clientWidth, parent.clientHeight);
+    // renderer.setSize(settings.maxRadius, settings.maxRadius);
 
-    console.log(cameraSettings);
+    canvas = renderer.domElement;
+    console.log({ canvas, parent });
+    this.poop.appendChild(canvas);
 
     // Set Color
     renderer.setClearColor(0x000000, 0);
@@ -86,7 +92,6 @@ class App extends React.Component {
     // Create Canvas in HTML imperatively
     // document.body.appendChild( renderer.domElement );
     // use ref as a mount point of the Three.js scene instead of the document.body
-    this.poop.appendChild(renderer.domElement);
 
     // Set up Particles Geometry
     let particle;
@@ -119,8 +124,6 @@ class App extends React.Component {
   animate = () => {
     requestAnimationFrame(this.animate);
 
-    this.resizeCanvasToDisplaySize();
-
     this.animateParticles();
     this.changeCircleRadius();
 
@@ -128,34 +131,21 @@ class App extends React.Component {
     renderer.render(scene, camera);
   };
 
-  resizeCanvasToDisplaySize() {
-    const canvas = renderer.domElement;
-    // look up the size the canvas is being displayed
-    const width = canvas.clientWidth;
-    const height = canvas.clientHeight;
-
-    // adjust displayBuffer size to match
-    if (canvas.width !== width || canvas.height !== height) {
-      // you must pass false here or three.js sadly fights the browser
-      renderer.setSize(width, height, false);
-      camera.aspect = width / height;
-      camera.updateProjectionMatrix();
-
-      // update any render target sizes here
-    }
-  }
+ 
 
   changeCircleRadius() {
-    if (circleCounter) {
-      settings.radius += 0.05;
-      if (settings.radius >= 65) {
-        circleCounter = false;
-      }
-    } else {
-      settings.radius -= 0.05;
-      if (settings.radius <= 35) {
-        console.log("hit");
-        circleCounter = true;
+    if (settings.animate) {
+      if (circleCounter) {
+        settings.radius += 0.05;
+        if (settings.radius >= settings.maxRadius) {
+          circleCounter = false;
+        }
+      } else {
+        settings.radius -= 0.05;
+        if (settings.radius <= settings.minRadius) {
+          console.log("hit");
+          circleCounter = true;
+        }
       }
     }
   }
@@ -181,7 +171,7 @@ class App extends React.Component {
       particle.position.x = Math.sin(j) * (j / (j / radius));
       particle.position.y = timeFloatData[j] * timeByteData[j] * intensity;
       particle.position.z = Math.cos(j) * (j / (j / radius));
-      camera.position.y = 100;
+      camera.position.y = 80;
       camera.fov = 35;
 
       // FLOWER
@@ -207,6 +197,8 @@ class App extends React.Component {
 
     width = parent.clientWidth;
     height = parent.clientHeight;
+
+    console.log({width, height}, settings.radius)
 
     renderer.setSize(width, height);
     camera.aspect = width / height;
