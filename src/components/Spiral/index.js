@@ -31,14 +31,13 @@ class App extends React.Component {
       // 'https://a.clyp.it/h1vtpoe4.mp3',
       // "https://a.clyp.it/mkfjydwq.mp3", //Italo disco
       // 'https://a.clyp.it/zas30wns.mp3', //sertraline
-      // 'https://a.clyp.it/xj0g30io.mp3', // blackbirds
+      'https://a.clyp.it/xj0g30io.mp3', // blackbirds
       // "https://a.clyp.it/fkvlpwft.mp3", // practice9short
       // 'https://a.clyp.it/bfujpc4c.mp3', // poetry
-      "https://a.clyp.it/0ar0p540.mp3", // 6.4
+      // "https://a.clyp.it/0ar0p540.mp3", // 6.4
       "https://a.clyp.it/jtxyzmfx.mp3", // 6.17 old,
       // 'https://a.clyp.it/p2fpdn5n.mp3', // SHANDREW
-      "https://a.clyp.it/qohhjp5p.mp3" //BEAT2
-      //   'https://audio.clyp.it/zha0rxwk.mp3?Expires=1578908284&Signature=dfHJFALsoxWMukvMiHbRtFKt7KPCaF1V-hBHCtGH~19aC-PjcSRXRkH32TG7wVCHC0zJ1HwZrAwtamgKtrJSK8wkBdl0AYeQu46kRuoiBLrgzMtDiOg5UQ~YnlEkj3chsTF~sjyBHQPuLwBwKsHPIpEWVfI2-V2ITCfD1gfGpG4_&Key-Pair-Id=APKAJ4AMQB3XYIRCZ5PA'
+      // "https://a.clyp.it/qohhjp5p.mp3" //BEAT2
     ],
     audioIndex: 0
   };
