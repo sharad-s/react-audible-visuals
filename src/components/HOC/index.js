@@ -47,3 +47,17 @@ export default class index extends Component {
     return <div></div>;
   }
 }
+
+/*
+Intended Common Props to pass down into any visualizer
+
+// Display props
+     - height: ? parent.clientHeight
+     - width ? parent.clientWidth
+     - position ? 
+     - flex (bool) ? false 
+     - backgroundColor ? none
+     - z-index ? 0 
+// 
+
+ */

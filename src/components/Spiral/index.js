@@ -52,7 +52,7 @@ class App extends React.Component {
       radius: 65,
       minRadius: 35,
       maxRadius: 65,
-      animate: false,
+      animate: true,
     };
 
     // Get parent element

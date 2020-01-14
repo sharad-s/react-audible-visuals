@@ -2,22 +2,23 @@ import React, { Component, Fragment } from "react";
 
 import { Spiral } from "react-audible-visuals";
 
+const BW = "B"
+
+
 const styles = {
   wrapper: {
     height: "100vh",
     width: "100vw",
-    top: 0,
+    bottom: 0,
     left: 0,
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "black",
-    position: "fixed",
-    zIndex: -1
+    zIndex: -1,
+    backgroundColor: BW === "B" ? "black" : "white",
   },
   text: {
-    color: "white", 
-    papaddingTop: "20px"
+    color: BW === "B" ? "white" : "black",
   }
 };
 
@@ -26,7 +27,9 @@ export default class App extends Component {
     return (
       <Fragment>
         <div style={styles.wrapper}>
-          <h1 style={styles.text}> HELLO </h1>
+        <div className="bounce">
+        <p style={styles.text}> HELLO </p>
+        </div>
           <Spiral />
         </div>
       </Fragment>
