@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 import THREE from "../../lib/getThree.min";
 
 import { PI2 } from "../../utils/constants";
@@ -23,24 +23,12 @@ var corsProxy = "https://cors-anywhere.herokuapp.com/";
 var settings;
 
 class App extends React.Component {
-  state = {
-    source: {},
-    audioURLS: [
-      // "https://a.clyp.it/cwvlsmnd.mp3", //rain
-      // "https://a.clyp.it/jagqtd5f.mp3",
-      // 'https://a.clyp.it/h1vtpoe4.mp3',
-      // "https://a.clyp.it/mkfjydwq.mp3", //Italo disco
-      // 'https://a.clyp.it/zas30wns.mp3', //sertraline
-      'https://a.clyp.it/xj0g30io.mp3', // blackbirds
-      // "https://a.clyp.it/fkvlpwft.mp3", // practice9short
-      // 'https://a.clyp.it/bfujpc4c.mp3', // poetry
-      // "https://a.clyp.it/0ar0p540.mp3", // 6.4
-      "https://a.clyp.it/jtxyzmfx.mp3", // 6.17 old,
-      // 'https://a.clyp.it/p2fpdn5n.mp3', // SHANDREW
-      // "https://a.clyp.it/qohhjp5p.mp3" //BEAT2
-    ],
-    audioIndex: 0
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      source: {},
+    };
+  }
 
   componentDidMount() {
     settings = {
@@ -55,9 +43,15 @@ class App extends React.Component {
       animate: true,
     };
 
+    this.setupRendering();
+    this.setupParticles();
+    this.setupEventHandlers();
+    this.animate();
+  }
+
+  setupRendering() {
     // Get parent element
     parent = this.poop.parentElement;
-    console.log({ parent });
 
     scene = new THREE.Scene();
 
@@ -65,9 +59,8 @@ class App extends React.Component {
     const cameraSettings = {
       fov: 20,
       width: parent.clientWidth,
-      height: parent.clientHeight
+      height: parent.clientHeight,
     };
-
     camera = new THREE.PerspectiveCamera(
       cameraSettings.fov,
       cameraSettings.width / cameraSettings.height,
@@ -79,45 +72,32 @@ class App extends React.Component {
     // Renderer
     renderer = new THREE.CanvasRenderer({ alpha: true });
     renderer.setSize(parent.clientWidth, parent.clientHeight);
-    // renderer.setSize(settings.maxRadius, settings.maxRadius);
-
-    canvas = renderer.domElement;
-    console.log({ canvas, parent });
-    this.poop.appendChild(canvas);
-
-    // Set Color
     renderer.setClearColor(0x000000, 0);
 
+    // Create canvas and append it
+    canvas = renderer.domElement;
     // Create Canvas in HTML imperatively
     // document.body.appendChild( renderer.domElement );
     // use ref as a mount point of the Three.js scene instead of the document.body
+    this.poop.appendChild(canvas);
+  }
 
-    // Set up Particles Geometry
+  // Set up Particles Geometry
+  setupParticles() {
     let particle;
     for (let i = 0; i <= 2048; i++) {
       const material = new THREE.SpriteCanvasMaterial({
         color: 0x000000,
-        program: function(context) {
+        program: function (context) {
           context.beginPath();
           context.arc(0, 0, 0.33, 0, PI2);
           context.fill();
-        }
+        },
       });
       particle = particles[i++] = new THREE.Particle(material);
 
       scene.add(particle);
     }
-
-    // Audio index init
-    const audioIndex = Math.floor(Math.random() * this.state.audioURLS.length);
-
-    // Set State
-    this.setState({
-      audioIndex
-    });
-    this.animate();
-
-    window.addEventListener("resize", this.windowResize, false);
   }
 
   animate = () => {
@@ -129,8 +109,6 @@ class App extends React.Component {
     camera.lookAt(scene.position);
     renderer.render(scene, camera);
   };
-
- 
 
   changeCircleRadius() {
     if (settings.animate) {
@@ -172,19 +150,6 @@ class App extends React.Component {
       particle.position.z = Math.cos(j) * (j / (j / radius));
       camera.position.y = 80;
       camera.fov = 35;
-
-      // FLOWER
-      // particle.position.x =
-      //   (settings.aFlower + settings.bFlower * ((settings.flowerAngle / 100) * j)) *
-      //     Math.cos((settings.flowerAngle / 100) * j) +
-      //   Math.sin(j / (settings.flowerAngle / 100)) * 17;
-      // particle.position.y =
-      //   (settings.aFlower + settings.bFlower * ((settings.flowerAngle / 100) * j)) *
-      //     Math.sin((settings.flowerAngle / 100) * j) +
-      //   Math.cos(j / (settings.flowerAngle / 100)) * 17;
-      // particle.position.z =
-      //   timeFloatData[j] * timeByteData[j] * intensity;
-      // camera.position.y = 0;
     }
     camera.fov = settings.fov;
     camera.updateProjectionMatrix();
@@ -197,84 +162,50 @@ class App extends React.Component {
     width = parent.clientWidth;
     height = parent.clientHeight;
 
-    console.log({width, height}, settings.radius)
+    console.log({ width, height }, settings.radius);
 
     renderer.setSize(width, height);
     camera.aspect = width / height;
     camera.updateProjectionMatrix();
   }
 
-  handleClick = e => {
-    e.preventDefault();
+  setupEventHandlers() {
+    const audio = this.props.audioRef.current;
+    const source = ctx.createMediaElementSource(audio); // creates audio source
 
-    if (isEmpty(this.audio.src)) {
-      this.initiateAudio(); // initiates audio from the dropped file
-      this.setupAudioHandlers();
-    } else if (!this.audio.paused) {
-      this.audio.pause();
-    } else {
-      this.audio.play();
-    }
-
-    console.log("new", { camera });
-  };
-
-  initiateAudio() {
-    // Load src
-    this.audio.src = this.getURL();
-    this.audio.load();
-    this.audio.play();
-
-    // Cors
-    this.audio.crossOrigin = "anonymous";
-
-    const source = ctx.createMediaElementSource(this.audio); // creates audio source
-    source.connect(ctx.destination); // connects the audioNode to the audioDestinationNode (computer speakers)
-    source.connect(analyser); // connects the analyser node to the audioNode and the audioDestinationNode
-
-    this.setState(
-      {
-        source
-      },
-      () => console.log(this.state)
-    );
-    this.animate();
-  }
-
-  setupAudioHandlers() {
-    this.audio.addEventListener("play", () => {
-      // alert("play")
+    audio.addEventListener("play", () => {
       console.log("PLAY event");
+      this.animate();
     });
 
-    this.audio.addEventListener("ended", () => {
+    audio.addEventListener("pause", () => {
+      console.log("PAUSE event");
+    });
+
+    audio.addEventListener("loadeddata", () => {
+      console.log("LOADED_DATA event");
+      source.connect(ctx.destination); // connects the audioNode to the audioDestinationNode (computer speakers)
+      source.connect(analyser); // connects the analyser node to the audioNode and the audioDestinationNode
+    });
+
+    audio.addEventListener("ended", () => {
       console.log("ENDED event");
       // Force call initiateAudio to "replay" the song
-      this.audio.src = this.getURL();
-      this.audio.load();
-      this.audio.play();
+      // this.audio.load();
+      // this.audio.play();
     });
-  }
 
-  getURL() {
-    let { audioIndex, audioURLS } = this.state;
-    audioIndex++;
-    if (audioIndex >= audioURLS.length) {
-      audioIndex = 0;
-    }
-    this.setState({ audioIndex });
-    return corsProxy + audioURLS[audioIndex];
+    window.addEventListener("resize", this.windowResize, false);
   }
 
   render() {
     return (
       <div
-        onClick={this.handleClick}
+        // onClick={this.handleClick}
         className={styles.circle}
-        ref={ref => (this.poop = ref)}
+        ref={(ref) => (this.poop = ref)}
       >
         {/* Canvas Goes Here */}
-        <audio ref={ref => (this.audio = ref)} />
       </div>
     );
   }

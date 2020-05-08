@@ -1,9 +1,12 @@
-import React, { Component, Fragment } from "react";
+import React, { useRef, useEffect, Fragment } from "react";
 
 import { Spiral } from "react-audible-visuals";
+import AudioPlayer from "./components/AudioPlayer";
 
-const BW = "B"
+const cors = "https://cors-anywhere.herokuapp.com/";
+var src = cors + "https://a.clyp.it/cwvlsmnd.mp3";
 
+const BW = "B";
 
 const styles = {
   wrapper: {
@@ -12,6 +15,7 @@ const styles = {
     bottom: 0,
     left: 0,
     display: "flex",
+    flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
     zIndex: -1,
@@ -19,20 +23,25 @@ const styles = {
   },
   text: {
     color: BW === "B" ? "white" : "black",
-  }
+  },
 };
 
-export default class App extends Component {
-  render() {
-    return (
-      <Fragment>
-        <div style={styles.wrapper}>
-        <div className="bounce">
-        <p style={styles.text}> HELLO </p>
-        </div>
-          <Spiral />
-        </div>
-      </Fragment>
-    );
-  }
-}
+const App = () => {
+  let context;
+  const audioRef = useRef();
+
+  useEffect(() => {
+
+  }, []);
+
+  return (
+    <Fragment>
+      <div style={styles.wrapper}>
+        <AudioPlayer ref={audioRef} />
+        <Spiral audioRef={audioRef} animateOnStart={true} />
+      </div>
+    </Fragment>
+  );
+};
+
+export default App;
