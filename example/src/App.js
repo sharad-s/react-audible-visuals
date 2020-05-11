@@ -10,8 +10,8 @@ const BW = "B";
 
 const styles = {
   wrapper: {
-    height: "100vh",
-    width: "100vw",
+    height: "50vh",
+    width: "50vw",
     bottom: 0,
     left: 0,
     display: "flex",
@@ -27,17 +27,11 @@ const styles = {
 };
 
 const App = () => {
-  let context;
-  const audioRef = useRef();
-
-  useEffect(() => {
-
-  }, []);
-
+  const audioRef = useRef(null);
   return (
     <Fragment>
+      <AudioPlayer ref={audioRef} />
       <div style={styles.wrapper}>
-        <AudioPlayer ref={audioRef} />
         <Spiral audioRef={audioRef} animateOnStart={true} />
       </div>
     </Fragment>

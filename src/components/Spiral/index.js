@@ -170,12 +170,12 @@ class App extends React.Component {
   }
 
   setupEventHandlers() {
-    const audio = this.props.audioRef.current;
+    const ref = this.props.audioRef2 || this.props.audioRef
+    const audio = ref.current;
     const source = ctx.createMediaElementSource(audio); // creates audio source
 
     audio.addEventListener("play", () => {
       console.log("PLAY event");
-      this.animate();
     });
 
     audio.addEventListener("pause", () => {
@@ -211,4 +211,6 @@ class App extends React.Component {
   }
 }
 
-export default App;
+export default React.forwardRef((props, ref) => <App
+  audioRef2={ref} {...props}
+/>)

@@ -49,4 +49,8 @@ export const AudioPlayer = React.forwardRef((props, ref) => {
   );
 });
 
+// const ForwardedAudioPlayer = React.forwardRef(AudioPlayer)
+// export default ForwardedAudioPlayer;
+
 export default AudioPlayer;
+
