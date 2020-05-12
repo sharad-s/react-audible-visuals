@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 
 const cors = "https://cors-anywhere.herokuapp.com/";
-var src = cors + "https://a.clyp.it/cwvlsmnd.mp3";
 
 export const AudioPlayer = React.forwardRef((props, ref) => {
   const [audioURLs] = useState([

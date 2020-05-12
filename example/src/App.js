@@ -1,10 +1,7 @@
-import React, { useRef, useEffect, Fragment } from "react";
+import React, { useRef, Fragment } from "react";
 
-import { Spiral } from "react-audible-visuals";
+import Spiral from "react-audible-visuals";
 import AudioPlayer from "./components/AudioPlayer";
-
-const cors = "https://cors-anywhere.herokuapp.com/";
-var src = cors + "https://a.clyp.it/cwvlsmnd.mp3";
 
 const BW = "B";
 

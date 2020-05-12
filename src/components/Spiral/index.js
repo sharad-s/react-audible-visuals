@@ -2,7 +2,7 @@ import React from "react";
 import THREE from "../../lib/getThree.min";
 
 import { PI2 } from "../../utils/constants";
-import isEmpty from "../../utils/isEmpty";
+// import isEmpty from "../../utils/isEmpty";
 
 // AudioContext
 import { ctx, analyser } from "../../utils/getAnalyser";
@@ -15,9 +15,6 @@ var particles = [];
 var circleCounter;
 
 var parent;
-
-// CORS
-var corsProxy = "https://cors-anywhere.herokuapp.com/";
 
 // Props and Default Props
 var settings;
