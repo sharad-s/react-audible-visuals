@@ -24,6 +24,7 @@ class App extends React.Component {
     super(props);
     this.state = {
       source: {},
+      type: "",
     };
   }
 
@@ -38,6 +39,7 @@ class App extends React.Component {
       B = 0.7,
       fov = 50,
       animate = true,
+      type = "circle"
     } = this.props
 
     settings = {
@@ -136,6 +138,10 @@ class App extends React.Component {
     }
   }
 
+  changeFlowerAngle() {
+
+  }
+
   animateParticles() {
     const { radius, intensity } = settings;
 
@@ -154,6 +160,7 @@ class App extends React.Component {
       particle.material.color.setRGB(R, G, B);
 
       // CIRCLE
+
       particle.position.x = Math.sin(j) * (j / (j / radius));
       particle.position.y = timeFloatData[j] * timeByteData[j] * intensity;
       particle.position.z = Math.cos(j) * (j / (j / radius));
