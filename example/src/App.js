@@ -29,7 +29,7 @@ const App = () => {
     <Fragment>
       <AudioPlayer ref={audioRef} />
       <div style={styles.wrapper}>
-        <Spiral audioRef={audioRef} radius={100} minRadius={70} maxRadius={80} fov={60}  />
+        <Spiral audioRef={audioRef} radius={100} minRadius={70} maxRadius={80} fov={60} intensity={0.09} />
       </div>
     </Fragment>
   );
