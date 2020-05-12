@@ -28,16 +28,28 @@ class App extends React.Component {
   }
 
   componentDidMount() {
+    const {
+      intensity = 0.08,
+      radius = 65,
+      minRadius = 35,
+      maxRadius = 65,
+      R = 0.7,
+      G = 0,
+      B = 0.7,
+      fov = 50,
+      animate = true,
+    } = this.props
+
     settings = {
-      R: 0.7,
-      G: 0,
-      B: 0.7,
-      fov: 50,
-      intensity: 0.08,
-      radius: 65,
-      minRadius: 35,
-      maxRadius: 65,
-      animate: true,
+      R,
+      G,
+      B,
+      fov,
+      intensity,
+      radius,
+      minRadius,
+      maxRadius,
+      animate,
     };
 
     this.setupRendering();

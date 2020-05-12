@@ -5,6 +5,7 @@ import postcss from 'rollup-plugin-postcss'
 import resolve from 'rollup-plugin-node-resolve'
 import url from 'rollup-plugin-url'
 import svgr from '@svgr/rollup'
+import { uglify } from "rollup-plugin-uglify";
 
 import pkg from './package.json'
 
@@ -14,12 +15,12 @@ export default {
     {
       file: pkg.main,
       format: 'cjs',
-      sourcemap: true
+      sourcemap: false
     },
     {
       file: pkg.module,
       format: 'es',
-      sourcemap: true
+      sourcemap: false
     }
   ],
   plugins: [
@@ -34,6 +35,6 @@ export default {
       plugins: [ 'external-helpers' ]
     }),
     resolve(),
-    commonjs()
+    commonjs(),
   ]
 }
